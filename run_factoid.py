@@ -762,7 +762,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
 
   _PrelimPrediction = collections.namedtuple(  # pylint: disable=invalid-name
       "PrelimPrediction",
-      ["feature_index", "start_index", "end_index", "start_logit", "end_logit"])
+      ["feature_index", "start_index", "end_index", "start_logit", "end_logit", "question_text", "context"])
 
   all_predictions = collections.OrderedDict()
   all_nbest_json = collections.OrderedDict()
@@ -815,7 +815,9 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
                   start_index=start_index,
                   end_index=end_index,
                   start_logit=result.start_logits[start_index],
-                  end_logit=result.end_logits[end_index]))
+                  end_logit=result.end_logits[end_index],
+                  question_text=example.question_text
+                  context=example.paragraph_text))
 
     if FLAGS.version_2_with_negative:
       prelim_predictions.append(
@@ -824,14 +826,17 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
               start_index=0,
               end_index=0,
               start_logit=null_start_logit,
-              end_logit=null_end_logit))
+              end_logit=null_end_logit,
+              question_text='',
+              context=''
+                ))
     prelim_predictions = sorted(
         prelim_predictions,
         key=lambda x: (x.start_logit + x.end_logit),
         reverse=True)
 
     _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
-        "NbestPrediction", ["question", "context", "text", "start_logit", "end_logit"])
+        "NbestPrediction", ["text", "start_logit", "end_logit", "question_text", "context"])
 
     seen_predictions = {}
     nbest = []
@@ -883,7 +888,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
     # just create a nonce prediction in this case to avoid failure.
     if not nbest:
       nbest.append(
-          _NbestPrediction(question="empty", context="empty", text="empty", start_logit=0.0, end_logit=0.0))
+          _NbestPrediction(text="empty", start_logit=0.0, end_logit=0.0, question_text="empty", context="empty"))
 
     assert len(nbest) >= 1
 
@@ -900,12 +905,12 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
     nbest_json = []
     for (i, entry) in enumerate(nbest):
       output = collections.OrderedDict()
-      output["question"] = entry.question_text
-      output["context"] = entry.paragraph_text
       output["text"] = entry.text
       output["probability"] = probs[i]
       output["start_logit"] = entry.start_logit
       output["end_logit"] = entry.end_logit
+      output["question_text"] = entry.question_text
+      output["context"] = entry.paragraph_text
       nbest_json.append(output)
 
     assert len(nbest_json) >= 1
