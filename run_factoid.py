@@ -866,7 +866,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
 
       nbest.append(
           _NbestPrediction(
-              question=question_text, 
+              question=pred.question_text, 
               context=paragraph_text,
               text=final_text,
               start_logit=pred.start_logit,
@@ -900,7 +900,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
     nbest_json = []
     for (i, entry) in enumerate(nbest):
       output = collections.OrderedDict()
-      output["question"] = self.question_text
+      output["question"] = entry.question_text
       output["context"] = entry.paragraph_text
       output["text"] = entry.text
       output["probability"] = probs[i]
