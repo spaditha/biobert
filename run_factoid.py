@@ -898,6 +898,8 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
     nbest_json = []
     for (i, entry) in enumerate(nbest):
       output = collections.OrderedDict()
+      output["question"] = entry.question_text
+      output["context"] = entry.question_text
       output["text"] = entry.text
       output["probability"] = probs[i]
       output["start_logit"] = entry.start_logit
