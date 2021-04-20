@@ -871,11 +871,11 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
 
       nbest.append(
           _NbestPrediction(
-              question=pred.question_text, 
-              context=paragraph_text,
               text=final_text,
               start_logit=pred.start_logit,
-              end_logit=pred.end_logit))
+              end_logit=pred.end_logit,
+              question_text=pred.question_text, 
+              context=pred.paragraph_text))
 
     # if we didn't inlude the empty option in the n-best, inlcude it
     if FLAGS.version_2_with_negative:
