@@ -817,7 +817,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
                   start_logit=result.start_logits[start_index],
                   end_logit=result.end_logits[end_index],
                   question_text=example.question_text
-                  context=example.paragraph_text))
+                  context=paragraph_text))
 
     if FLAGS.version_2_with_negative:
       prelim_predictions.append(
