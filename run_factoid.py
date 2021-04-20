@@ -831,7 +831,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
         reverse=True)
 
     _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
-        "NbestPrediction", ["text", "start_logit", "end_logit"])
+        "NbestPrediction", ["question", "context", "text", "start_logit", "end_logit"])
 
     seen_predictions = {}
     nbest = []
@@ -866,6 +866,8 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
 
       nbest.append(
           _NbestPrediction(
+              question=question_text, 
+              context=paragraph_text,
               text=final_text,
               start_logit=pred.start_logit,
               end_logit=pred.end_logit))
@@ -875,13 +877,13 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
       if "" not in seen_predictions:
         nbest.append(
             _NbestPrediction(
-                text="", start_logit=null_start_logit,
+                question="", context="", text="", start_logit=null_start_logit,
                 end_logit=null_end_logit))
     # In very rare edge cases we could have no valid predictions. So we
     # just create a nonce prediction in this case to avoid failure.
     if not nbest:
       nbest.append(
-          _NbestPrediction(text="empty", start_logit=0.0, end_logit=0.0))
+          _NbestPrediction(question="empty", context="empty", text="empty", start_logit=0.0, end_logit=0.0))
 
     assert len(nbest) >= 1
 
