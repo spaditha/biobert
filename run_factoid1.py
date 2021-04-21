@@ -163,6 +163,7 @@ class SquadExample(object):
   def __init__(self,
                qas_id,
                question_text,
+               paragraph_text,
                doc_tokens,
                orig_answer_text=None,
                start_position=None,
@@ -170,6 +171,7 @@ class SquadExample(object):
                is_impossible=False):
     self.qas_id = qas_id
     self.question_text = question_text
+    self.paragraph_text = paragraph_text
     self.doc_tokens = doc_tokens
     self.orig_answer_text = orig_answer_text
     self.start_position = start_position
