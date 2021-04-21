@@ -765,8 +765,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
 
   _PrelimPrediction = collections.namedtuple(  # pylint: disable=invalid-name
       "PrelimPrediction",
-      ["feature_index", "start_index", "end_index", "start_logit", "end_logit", "question_text"])
-       #, "context"])
+      ["feature_index", "start_index", "end_index", "start_logit", "end_logit", "question_text", "paragraph_text"])
 
   all_predictions = collections.OrderedDict()
   all_nbest_json = collections.OrderedDict()
