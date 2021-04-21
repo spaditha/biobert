@@ -303,6 +303,7 @@ def read_squad_examples(input_file, is_training):
         example = SquadExample(
             qas_id=qas_id,
             question_text=question_text,
+            paragraph_text=paragraph_text,
             doc_tokens=doc_tokens,
             orig_answer_text=orig_answer_text,
             start_position=start_position,
@@ -817,8 +818,8 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
                   end_index=end_index,
                   start_logit=result.start_logits[start_index],
                   end_logit=result.end_logits[end_index],
-                  question_text=example.question_text))
-                  # context=paragraph_text))
+                  question_text=example.question_text,
+                  paragraph_text=example.paragraph_text))
         
 
     if FLAGS.version_2_with_negative:
@@ -876,8 +877,8 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
               text=final_text,
               start_logit=pred.start_logit,
               end_logit=pred.end_logit,
-              question_text=pred.question_text))
-              #context=pred.paragraph_text))
+              question_text=pred.question_text,
+              paragraph_text=pred.paragraph_text))
 
     # if we didn't inlude the empty option in the n-best, inlcude it
     if FLAGS.version_2_with_negative:
@@ -914,7 +915,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
       output["start_logit"] = entry.start_logit
       output["end_logit"] = entry.end_logit
       output["question_text"] = entry.question_text
-      #output["context"] = entry.paragraph_text
+      output["paragraph_text"] = entry.paragraph_text
       nbest_json.append(output)
 
     assert len(nbest_json) >= 1
