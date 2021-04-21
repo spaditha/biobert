@@ -831,16 +831,15 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
               end_index=0,
               start_logit=null_start_logit,
               end_logit=null_end_logit,
-              question_text=''))
-              #,context='' ))
+              question_text='',
+              paragraph_text='' ))
     prelim_predictions = sorted(
         prelim_predictions,
         key=lambda x: (x.start_logit + x.end_logit),
         reverse=True)
 
     _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
-        "NbestPrediction", ["text", "start_logit", "end_logit", "question_text"])
-                            #, "context"])
+        "NbestPrediction", ["text", "start_logit", "end_logit", "question_text", "paragraph_text"])
 
     seen_predictions = {}
     nbest = []
@@ -887,14 +886,13 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
         nbest.append(
             _NbestPrediction(
                 text="", start_logit=null_start_logit,
-                end_logit=null_end_logit, question=""))
-                #, context=""))
+                end_logit=null_end_logit, question_text="", paragraph_text=""))
+        
     # In very rare edge cases we could have no valid predictions. So we
     # just create a nonce prediction in this case to avoid failure.
     if not nbest:
       nbest.append(
-          _NbestPrediction(text="empty", start_logit=0.0, end_logit=0.0, question_text="empty"))
-                           #, context="empty"))
+          _NbestPrediction(text="empty", start_logit=0.0, end_logit=0.0, question_text="empty", paragraph_text="empty"))
 
     assert len(nbest) >= 1
 
