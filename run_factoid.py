@@ -762,7 +762,8 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
 
   _PrelimPrediction = collections.namedtuple(  # pylint: disable=invalid-name
       "PrelimPrediction",
-      ["feature_index", "start_index", "end_index", "start_logit", "end_logit", "question_text", "context"])
+      ["feature_index", "start_index", "end_index", "start_logit", "end_logit", "question_text"])
+       #, "context"])
 
   all_predictions = collections.OrderedDict()
   all_nbest_json = collections.OrderedDict()
@@ -828,16 +829,16 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
               end_index=0,
               start_logit=null_start_logit,
               end_logit=null_end_logit,
-              question_text='',
-              context=''
-                ))
+              question_text=''))
+              #,context='' ))
     prelim_predictions = sorted(
         prelim_predictions,
         key=lambda x: (x.start_logit + x.end_logit),
         reverse=True)
 
     _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
-        "NbestPrediction", ["text", "start_logit", "end_logit", "question_text", "context"])
+        "NbestPrediction", ["text", "start_logit", "end_logit", "question_text"])
+                            #, "context"])
 
     seen_predictions = {}
     nbest = []
@@ -875,21 +876,23 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
               text=final_text,
               start_logit=pred.start_logit,
               end_logit=pred.end_logit,
-              question_text=pred.question_text, 
-              context=pred.paragraph_text))
+              question_text=pred.question_text))
+              #context=pred.paragraph_text))
 
     # if we didn't inlude the empty option in the n-best, inlcude it
     if FLAGS.version_2_with_negative:
       if "" not in seen_predictions:
         nbest.append(
             _NbestPrediction(
-                question="", context="", text="", start_logit=null_start_logit,
-                end_logit=null_end_logit))
+                text="", start_logit=null_start_logit,
+                end_logit=null_end_logit, question=""))
+                #, context=""))
     # In very rare edge cases we could have no valid predictions. So we
     # just create a nonce prediction in this case to avoid failure.
     if not nbest:
       nbest.append(
-          _NbestPrediction(text="empty", start_logit=0.0, end_logit=0.0, question_text="empty", context="empty"))
+          _NbestPrediction(text="empty", start_logit=0.0, end_logit=0.0, question_text="empty"))
+                           #, context="empty"))
 
     assert len(nbest) >= 1
 
