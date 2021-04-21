@@ -721,6 +721,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
       output["text"] = entry.answer
       output["probability"] = probs
       output["logit"] = entry.logit
+      output["question_text"] = entry.question_text
 
     all_predictions[example.qas_id] = [prelim_predictions[0].answer, probs]
 
