@@ -15,7 +15,7 @@ with open ('Merge.json', 'a') as f3:
   f3.write(f1data)
 
   
-  def prep_factoid(data: dict, test_file: bool = False) -> dict:
+  def prep_list(data: dict, test_file: bool = False) -> dict:
    paragraphs = []
    for j, question in enumerate(data['questions']):
 
@@ -66,7 +66,7 @@ with open ('Merge.json', 'a') as f3:
    }
    return prepped_dict
   
-  def prep_factoid_test(data: dict, test_file: bool = False) -> dict:
+  def prep_list_test(data: dict, test_file: bool = False) -> dict:
    paragraphs = []
    for j, question in enumerate(data['questions']):
        if question['type'] == 'factoid':
@@ -121,7 +121,7 @@ with open ('Merge.json', 'a') as f3:
 with open('BioASQ-task9bPhaseB-testset4') as f:
     data = json.load(f)
 
-prepped_data = prep_factoid_test(data)
+prepped_data = prep_list_test(data)
 #prepped_data_yesno = prep_yesno(data)
 #print(prepped_data)
 
