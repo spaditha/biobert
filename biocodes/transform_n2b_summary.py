@@ -450,7 +450,7 @@ for qid in qidDict:
         u"type": "summary",
         # u"body":qas,
         u"id": qid,  # must be 24 char
-        u"ideal_answer": ["Dummy"],
+        u"ideal_answer": "",
         #u"exact_answer": exact_answer,
     }
     entryList.append(entry)
